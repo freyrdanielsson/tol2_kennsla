@@ -1,0 +1,22 @@
+"testqueue.mexe" = main in
+{{
+main =
+	fun()
+	{
+		var p = maxPQ();
+	};
+}}
+*
+"MaxPQ.mmod"
+*
+<<== = fun(x,y)
+      {
+        if( x==[] ) {return true};
+        if( y==[] ) {return false};
+        if( head(x)<head(y) ) {return true};
+        if( head(y)<head(x) ) {return false};
+        return lexico(tail(x),tail(y));
+    };
+*
+BASIS
+;
