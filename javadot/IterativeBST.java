@@ -10,19 +10,23 @@ public class IterativeBST<Key extends Comparable<Key>, Value> extends BST<Key, V
 
     @Override
     public Key min() {
-        // hint: left...
+        if (isEmpty()) throw new NoSuchElementException("called min() with empty symbol table");
+        Node node = this.root;
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node.key;
     }
 
     @Override
     public Key max() {
-        // hint: right...
+        if (isEmpty()) throw new NoSuchElementException("called min() with empty symbol table");
+        Node node = this.root;
+        while (node.right != null) {
+            node = node.right;
+        }
+        return node.key;
     }
-
-    /**
-     * hint:
-     * breyta aðgengi að breytum og node klasanum í BST.java
-     * og extenda hann bara? eeeeða copy-paste 🙁
-     */
 
     public static void main(String[] args) {
         /*

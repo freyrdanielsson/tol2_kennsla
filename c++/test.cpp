@@ -4,26 +4,23 @@
 
 using namespace std;
 
-void exch(vector<int> &a, int i, int j) {
-
+void quickrec(vector<int>& v, int lo, int hi) {
+if(hi <= lo) return;
+int i = lo, j = hi + 1;
+int p = v[lo];
+while(true) {
+while(v[++i] < p) if(i == hi) break;
+while(p < v[--j]) if(j == lo) break;
+if(i >= j) break;
+swap(v[i], v[j]);
 }
-
-// partition the subarray a[lo..hi] so that a[lo..j-1] <= a[j] <= a[j+1..hi]
-// and return the index j.
-int partition(vector<int> &a, int lo, int hi) {
-    
+swap(v[lo], v[j]);
+quickrec(v, lo, j - 1);
+quickrec(v, j + 1, hi);
 }
-
-// quicksort the subarray from a[lo] to a[hi]
-void quicksort(vector<int> &a, int lo, int hi) {
-
-}
-
-void quicksort(vector<int> &a) {
-    // Hingað þarf að koma útfærsla á quicksort!
-    // Mælt er með því að fylgja hugmyndunum í Quick.java.
-    // stokka fylkið og kalla á annað quicksort sem tekur fleiri parametra
-    // og basicly herma eftir Quick i java...😎
+void quicksort(vector<int>& v) {
+random_shuffle(v.begin(), v.end());
+quickrec(v, 0, v.size() - 1);
 }
 
 bool issorted(vector<int>& v) {

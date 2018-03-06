@@ -47,12 +47,12 @@ public class NotQuick {
             // check if pointers cross
             if (i >= j) break;
 
-            StdOut.print(String.format("Vendistak %s, raðað frá %2d til %2d: ", v, lo, hi));
-            show(a);
-
+            
             exch(a, i, j);
         }
-
+        
+        StdOut.print(String.format("Vendistak %s, raðað frá %2d til %2d: ", v, lo, hi));
+        show(a);
         // put partitioning item v at a[j]
         exch(a, lo, j);
 
