@@ -1,3 +1,5 @@
+package javadot;
+
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Graph;
 import edu.princeton.cs.algs4.StdOut;
@@ -13,15 +15,27 @@ public class SimpleGraph extends Graph {
 
     @Override
     public void addEdge(int v, int w) {
-        // Hér þarf að skrifa kóða!
-        // bara kasta villum undir ákveðnum kringustæðum.. það vantar í Graph.java
-        // engar lykkjur, engar endurtekningar
-        // skoðið adj í Graph.java. það er fylki af pokum. Hverju skilar það?💰 ( getiið notað fallið með this.adj(int) )
+        /*
+        Bætir legg á milli hnúta númer <v> og <w> við netið.
+         */
+        if (v == w) {
+            throw new IllegalArgumentException("Lykkjur eru ekki leyfðar í einföldu neti");
+        }
+        for (Integer z : this.adj(v)) {
+            if (z == w) {
+                throw new IllegalArgumentException("Endurteknir leggir eru ekki leyfðir í einföldu neti");
+            }
+        }
+        for (Integer z : this.adj(w)) {
+            if (z == v) {
+                throw new IllegalArgumentException("Endurteknir leggir eru ekki leyfðir í einföldu neti");
+            }
+        }
         super.addEdge(v, w); // Kallar á addEdge aðferðina í Graph.java
     }
 
     public static void main(String[] args) {
-        int[] gNumbers = new In("tinyG.txt").readAllInts(); // Lesum inn netið í tinyG.txt
+        int[] gNumbers = new In("javadot/tinyG.txt").readAllInts(); // Lesum inn netið í tinyG.txt
         SimpleGraph g = new SimpleGraph(gNumbers[0]); // Fyrsta talan í skránni er hnútafjöldinn
         for (int i = 2; i < gNumbers.length; i += 2) { // Tölur 2 og uppúr í skránni tákna leggi
             g.addEdge(gNumbers[i], gNumbers[i + 1]);

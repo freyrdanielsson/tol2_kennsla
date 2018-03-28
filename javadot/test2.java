@@ -1,26 +1,27 @@
 
+import java.util.*;
 
-import edu.princeton.cs.algs4.*;
+SET<String> actors = new Set<>();
 
-public class SortingCompetition {
+actors.add(String)
 
-		// Hér ættu alveg örugglega að koma ein eða fleiri aðferðir til hjálpar.
-		// t.d nákvæmlega sama fall og í dæmi 2 nema með merge sort? (yes)
 
-    public static void main(String[] args) {
+ In in = new In("javadot/movies.txt");
+ String[] moviesActors = in.readAllLines();
+ System.out.println("lengd fylkis " + moviesActors.length);
 
-        int maxN = 1000; // Við gefumst upp eftir 1000 stök
-        int numTrials = 50000; // Fjöldi mælinga fyrir hverja stærð fylkis, hér mjög stórt
-        long seed = 203; // Fastur grunnur fyrir slembitölugjafann
-        int n = 10; // Byrjum að skoða fylki af þessari stærð
-
-        long insertionTime = 0;
-        long mergeTime = Long.MAX_VALUE;
-        while (insertionTime < mergeTime && n < maxN) {
-            // Hér þarf að skrifa kóða!
-            n++;
-        }
-        StdOut.println(n);
+//fá Bag af leikurum úr hverri línu og setja í <SET>
+//ath SET samþykir bara .add() ef hluturinn er ekki í menginu núþegar
+//svo sama nafni verður ekki bætt við tvisvar
+for(int i=0; i<moviesActors.length; i++){
+    Bag<String> actorBag = getActorsFromLine(moviesActors[i]);
+    for(String s : actorBag){
+        actors.add(s);
     }
-
 }
+
+SymbolGraph sg = new SymbolGraph("javadot/movies.txt", "/");
+
+Graph graph = sq.graph();
+
+int i = sg.indexOf("Bacon, Kevin");

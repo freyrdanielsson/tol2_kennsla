@@ -1,57 +1,80 @@
-package javadot;
+import edu.princeton.cs.algs4.Graph;
+import edu.princeton.cs.algs4.SymbolGraph;
+import edu.princeton.cs.algs4.StdOut;
 
-import edu.princeton.cs.algs4.*;
+public class GraphProperties {
 
-public class PlotRunningTimes {
+    private Graph g;
+    // Búa til breytur fyrir radius, diameret, center og eccentricity...eða ekki þið ráðið
 
-    public static long timeInsertionSort(int arraySize, int numTrials, long seed) {
-        // Hér er ráðlagt (en ekki nauðsynlegt) að skrifa aðferð skv. lýsingu:
+    GraphProperties(Graph g) {
         /*
-        Skilar meðalkeyrslutíma innsetningarröðunar á slembifylki af stærð <arraySize> 
-        eftir <numTrials> keyrslur, með slembitölugjafann stilltan á <seed>.
+        Upphafsstillir klasa sem reiknar út nokkra eiginleika netsins <g>.
+        Netið <g> skal vera samanhangandi. Þessi aðferð veldur villu sé svo ekki.
+        */
 
-        // Hér væri frekar nice að nota slembifylkið úr dæmi 1
-        // Hér væri ekki nice að skrifa það allt aftur
-        // Hér væri nice að nota það bara beint því það er hægt (pakkakerfi)
-        // double[] a;
-        // a = MoreRandom(arraySize, seed); komið!
-        // Allir eru að nota pakkakerfi en ekki allir vita það
+        // Skoðiði Graph klasann. Hvað gerir t.d. g.V() ??
+        // Skoðið BreadthFirstPaths klasann, það eru 102 leiðir til að gera þetta en ég notaði það.
+        // Skoðið smiðinn á honum.. gæti verið hentugur til að ath hvort net sé samhangandi 🤔
+        // BreadhFirstPaths hefur líka hasPathTo fall 😮
+        // Hér er líka fínt að upphafsstilla eccentricity [] (já það er gott að hafa fylki af eccemtricity fyrir hvern hnút held ég)
+        // bara setja lengd á það, það er upphafsstillt með null-um
 
-        /* Lykkja */ 
-        // fáum slembifylki
-        // byrjum tíma
-        // röðum fylki
-        // endum tíma
-        // leggjum allan timan saman
-        /* */
-        // skilum samanlögðum tíma deilt með numTrials 
+        // Hér þarf að skrifa kóða!
+        this.g = g;
+    }
+
+    public int eccentricity(int v) {
+        /*
+        Skilar lengd stystu leiðar frá hnútnum <v> í <this.g> til þess hnúts sem lengst er frá honum.
+        */
+
+        // Ath þetta fall er notað í honum föllunum 😬
+        // hér væri t.d. sniðugt að skila eccentricity úr eccentricity fylkinu m.v. int v se mer tekið inn
+        // þetta var alveg smá flókið getum skoðað þetta betur allir sáttir
+
+        // Hér þarf að skrifa kóða!
+        return 0;
+    }
+
+    public int diameter() {
+        /*
+        Skilar hæsta eccentricity meðal allra hnúta í <this.g>.
+        */
+        // Hér þarf að skrifa kóða!
+        return 0;
+    }
+
+    public int radius() {
+        /*
+        Skilar lægsta eccentricity meðal allra hnúta í <this.g>.
+        */
+        // Hér þarf að skrifa kóða!
+        return 0;
+    }
+
+    public int center() {
+        /*
+        Skilar númeri hnúts í <this.g> sem hefur eccentricity = this.radius().
+        */
         return 0;
     }
 
     public static void main(String[] args) {
-        /* Skilgreining gagna */
+        SymbolGraph sg = new SymbolGraph("routes.txt", " ");
+        GraphProperties gp = new GraphProperties(sg.graph());
 
-        int maxArraySize = 5000; // Mesta stærð á fylki sem við ætlum að tímamæla
-        int stride = 10; // Bil á milli stærða
-        int numTrials = 20; // Fjöldi mælinga fyrir hverja stærð fylkis
-        long seed = 203; // Fastur grunnur fyrir slembitölugjafann
-
-        /* Mælingar */
-
-        // Hér þarf að skrifa kóða!
-        // fint að hafa í huga.
-        // hvað munum við prófa mörg fylki?
-        // væri ekki sniðugt að geyma tima fyrir hvert fylki að raðast 20x í öðru fylki? (jú)
-        // væri kanski sniðugt að halda utam um lengsta tíman því við þurfum
-        // að plotta þetta á eftir? (já)
-
-        /* Teikning á niðurstöðum */
-
-        // Hvernig er best að hafa ásana? er ekki best að hafa stærð fylkis
-        // sem fall af tíma? (jú)
-        // hint hafið penRadius frekar lítið .setPenRadius(0,x);
-
-        // Hér þarf að skrifa kóða!
+        StdOut.println("Eiginleikar leiðanetsins:");
+        StdOut.println("");
+        StdOut.println("Þvermál:   " + gp.diameter());
+        StdOut.println("Radíus:    " + gp.radius());
+        StdOut.println("Miðhnútur: " + sg.nameOf(gp.center()));
+        StdOut.println("");
+        StdOut.println(" Völlur frávik ");
+        StdOut.println("===============");
+        for (int v = 0; v < sg.graph().V(); v++) {
+            StdOut.println(String.format("  %-5s   %-4d", sg.nameOf(v), gp.eccentricity(v)));
+        }
     }
 
 }

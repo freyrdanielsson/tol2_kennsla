@@ -1,4 +1,11 @@
-public class SinglyLinkedList<T> {
+package javadot;
+
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
+
+import java.util.Iterator;
+
+public class SinglyLinkedList<T> implements Iterable<T> {
 
 
     private class Node {
@@ -43,17 +50,17 @@ public class SinglyLinkedList<T> {
         Aðferð sem sýnir fallega strengjaframsetningu á listanum.
          */
         Node node = this.head;
-        String representation = "[ ";
+        String representation = "";
         while (node != null) {
-            representation += node.data.toString() + " "; // Ath. að þetta er ekki skilvirkt, dekkum seinna
+            representation += node.data.toString() + " -> "; // Ath. að þetta er ekki skilvirkt, dekkum seinna
             node = node.next;
         }
-        return representation + "]";
+        return representation + "Ø";
     }
 
     public T get(int index) {
         /*
-        Skilar staki númer index í listanum án þess að breyta honum.
+        Skilar staki númer <index> í listanum án þess að breyta honum.
          */
         if (index < 0 || this.size() <= index) {
             throw new ArrayIndexOutOfBoundsException("Vísað út fyrir lista");
@@ -73,7 +80,7 @@ public class SinglyLinkedList<T> {
 
     public void insert(int index, T data) {
         /*
-        Bætir staki við listann í sæti númer index, án þess að yfirskrifa stak.
+        Bætir staki við listann í sæti númer <index>, án þess að yfirskrifa stak.
         Öllum stökum sem koma á eftir nýja stakinu hliðrast í átt að enda listans.
          */
         if (index < 0 || this.size() < index) {
@@ -93,44 +100,134 @@ public class SinglyLinkedList<T> {
         this.length++;
     }
 
+    public void delete(int index) {
+        /*
+        Fjarlægir stak númer <index> úr listanum. Númer allra staka sem á eftir koma skulu lækka.
+         */
+        if (index < 0 || this.size() <= index) {
+            throw new ArrayIndexOutOfBoundsException("Vísað út fyrir lista");
+        }
+
+        if (index == 0) { // Sértilfelli - byrjun listans
+            this.head = this.head.next; // Tryggðum í upphafi að hausinn var ekki tómur
+        } else {
+            Node previous = this.head;
+            for (int i = 0; i < index - 1; i++) { // Ath. að i < index < size
+                previous = previous.next;
+            }
+            previous.next = previous.next.next;
+        }
+        this.length--;
+    }
+
+    public void swap(int index1, int index2) {
+        /*
+        Skiptir á staðsetningum hnúta númer <index1> og <index2> með því að uppfæra vísanir nágranna þeirra.
+        Ekki er tryggt að <index1> sé minni en <index2>.
+         */
+        if (index1 < 0 || index2 < 0 || this.size() <= index1 || this.size() <= index2) {
+            throw new ArrayIndexOutOfBoundsException("Vísað út fyrir lista");
+        }
+
+        Node beforeFirst = null, first = null, beforeSecond = null, second = null;
+        Node current = this.head;
+        int i = 0;
+        while (current != null) {
+            if (i == index1 - 1) {
+                beforeFirst = current;
+            }
+            if (i == index1) {
+                first = current;
+            }
+            if (i == index2 - 1) {
+                beforeSecond = current;
+            }
+            if (i == index2) {
+                second = current;
+            }
+            current = current.next;
+            i++;
+        }
+        Node temp;
+        if (beforeFirst != null && beforeSecond != null) {
+            beforeFirst.next = second;
+            beforeSecond.next = first;
+
+        } else {
+            if (beforeFirst == null) {
+                this.head = second;
+                beforeSecond.next = first;
+            }
+            if (beforeSecond == null) {
+                this.head = first;
+                beforeFirst.next = second;
+            }
+        }
+
+        temp = first.next;
+        first.next = second.next;
+        second.next = temp;
+    }
+
+    public Iterator<T> iterator() {
+        /*
+        Einfaldur ítrari fyrir SinglyLinkedList klasann, sjá ListIterator
+        */
+        return new ListIterator();
+    }
+
+    private class ListIterator implements Iterator<T> {
+        private Node current = head;
+
+        public boolean hasNext() {
+            return this.current != null;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        public T next() {
+            T item = this.current.data;
+            this.current = this.current.next;
+            return item;
+        }
+    }
+
     public static void main(String[] args) {
-        SinglyLinkedList<Integer> list1 = new SinglyLinkedList<>();
-        try {
-            list1.insert(0, 2); // Athugum hvort við getum bætt við staki í tóman lista
-            System.out.println(list1); // [ 2 ]
-            list1.insert(0, 1); // Athugum hvort við getum bætt staki fremst í lista
-            System.out.println(list1); // [ 1 2 ]
-            list1.insert(2, 4); // Athugum hvort við getum bætt staki aftast í lista
-            System.out.println(list1); // [ 1 2 4 ]
-            list1.insert(2, 3); // Athugum hvort við getum bætt staki í miðjan lista
-            System.out.println(list1); // [ 1 2 3 4]
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Innsetningaraðferðin brást þegar hún átti ekki að gera það");
-            e.printStackTrace();
-        }
+        SinglyLinkedList<Integer> list = new SinglyLinkedList<>();
+        list.insert(0, 2);
+        list.insert(0, 1);
+        list.insert(2, 4);
+        list.insert(2, 3);
+        StdOut.println("Listinn er í upphafi:          " + list);
+        StdOut.println("");
 
-        for (int i = 0; i < list1.size(); i++) { // Sýnum að get aðferðin virki
-            System.out.println("list1.get(" + i +"): " + list1.get(i));
-        }
+        // Prófum swap aðferðina
+        StdOut.print("Skiptum á hnútum 1 og 3, ");
+        list.swap(1, 3);
+        StdOut.println("fáum: " + list);
+        StdOut.print("Lagfærum listann aftur, ");
+        list.swap(3, 1);
+        StdOut.println("fáum:  " + list);
+        StdOut.print("Prófum að skipta á endunum:    ");
+        list.swap(0, list.size() - 1);
+        StdOut.println(list);
+        StdOut.print("Lagfærum aftur:                ");
+        list.swap(list.size() - 1, 0);
+        StdOut.println(list);
 
-        try {
-            System.out.println(list1.get(-1));
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Kall á list1.get(-1) mistókst réttilega");
-        }
+        // Prófum delete aðferðina
+        StdOut.println("");
+        StdOut.println("Hendum nú út öllum hnútunum í slembinni röð");
 
-        try {
-            System.out.println(list1.get(list1.size()));
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Kall á list1.get(list1.size()) mistókst réttilega");
+        int max = 10, count = 0; // Svo lykkjan keyri ekki endalaust þegar eyðingin er ókláruð
+        int index = 0;
+        while (!list.isEmpty() && count++ < max) {
+            index = StdRandom.uniform(0, list.size()); // Veljum stak af handahófi
+            StdOut.print("Hendum staki númer " + index);
+            list.delete(index);
+            StdOut.println(". Eftir eyðingu er listinn: " + list);
         }
-
-        // Prófum annan lista til að sýna að hann sé fjölnota:
-        SinglyLinkedList<Character> list2 = new SinglyLinkedList<>();
-        list2.insert(0,'D');
-        list2.insert(0,'C');
-        list2.insert(0,'B');
-        list2.insert(0,'A');
-        System.out.println(list2);
     }
 }
