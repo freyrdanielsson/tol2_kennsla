@@ -72,5 +72,6 @@ public class Schulze {
             StdOut.print(winners[i] + " < ");
         }
         StdOut.println(winners[winners.length - 1]);
+				StdOut.println('B'-'A');
     }
 }
