@@ -41,10 +41,36 @@ public class Schulze {
 
 
     public static void main(String[] args) {
-        String[] votes = new In("votes.txt").readAllLines();
+        String[] votes = new In("javadot/votes.txt").readAllLines();
         int numCandidates = Integer.parseInt(votes[0]);
-
-        // Hér þarf að skrifa kóða!
-        // Mælt er með því að skrifa hjálparaðferðir.
+        int[][] preferences = new int[numCandidates][numCandidates];
+        for (int i = 1; i < votes.length; i++) {
+            char[] candidates = votes[i].toCharArray();
+            for (int j = 0; j < candidates.length; j++) {
+                int preferredCandidate = candidates[j] - 'A';
+                for (int k = j + 1; k < candidates.length; k++) {
+                    int lessPreferredCandidate = candidates[k] - 'A';
+                    preferences[preferredCandidate][lessPreferredCandidate]++;
+                }
+            }
+        }
+        int[][] strongestPaths = floydWarshall(preferences, numCandidates);
+        int[] rankings = new int[numCandidates];
+        for (int candidate = 0; candidate < numCandidates; candidate++) {
+            for (int opponent = 0; opponent < numCandidates; opponent++) {
+                if (strongestPaths[candidate][opponent] > strongestPaths[opponent][candidate]) {
+                    rankings[candidate]++;
+                }
+            }
+        }
+        char[] winners = new char[numCandidates];
+        char rank = 'A';
+        for (int ranking : rankings) {
+            winners[ranking] = rank++;
+        }
+        for (int i = 0; i < winners.length - 1; i++) {
+            StdOut.print(winners[i] + " < ");
+        }
+        StdOut.println(winners[winners.length - 1]);
     }
 }

@@ -47,7 +47,6 @@ public class SixDegrees {
         while (itr.hasNext()) {
             degree = 0;
             String name = itr.next();//name- nafn sem á að finna bacon tölu á
-						System.out.println(name);
             int t = sg.indexOf(name);
             if(bfs.hasPathTo(t)){
                 for(int v : bfs.pathTo(t)){
